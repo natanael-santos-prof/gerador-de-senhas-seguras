@@ -1,38 +1,55 @@
-# 🛡️ Gerador de Senhas Criptograficamente Seguro (Python)
+import string
+import secrets
 
-Este é um projeto desenvolvido como parte dos meus estudos no 2º ano de **Segurança da Informação**. O objetivo foi criar uma ferramenta de linha de comando capaz de gerar senhas de alta entropia, seguindo as melhores práticas de cibersegurança.
 
-## 🚀 Diferencial Técnico (Foco em Segurança)
+def gerar_senha(comprimento=16):
+    # Define os grupos de caracteres recomendados para segurança
+    letras_minusculas = string.ascii_lowercase
+    letras_maiusculas = string.ascii_uppercase
+    digitos = string.digits
+    especiais = string.punctuation
 
-A maioria dos geradores de senha básicos utiliza a biblioteca padrão `random` do Python. No entanto, em Segurança da Informação, o módulo `random` **não deve ser utilizado** para fins de segurança ou criptografia, pois ele gera números pseudoaleatórios que podem ser previstos por um atacante.
+    # Garante que a senha terá pelo menos um caractere de cada tipo
+    senha_obrigatoria = [
+        secrets.choice(letras_minusculas),
+        secrets.choice(letras_maiusculas),
+        secrets.choice(digitos),
+        secrets.choice(especiais),
+    ]
 
-Neste projeto, apliquei:
-*   **Módulo `secrets`:** Utilizado para gerar números aleatórios criptograficamente seguros (CSPRNG), ideais para gerenciar segredos como senhas, tokens de segurança e chaves de autenticação.
-*   **Complexidade Obrigatória:** O algoritmo garante que, independentemente do tamanho escolhido, a senha gerada conterá obrigatoriamente pelo menos:
-    *   1 caractere maiúsculo
-    *   1 caractere minúsculo
-    *   1 dígito numérico
-    *   1 caractere especial
+    # Junta todos os caracteres possíveis para o restante da senha
+    todos_os_caracteres = (
+        letras_minusculas + letras_maiusculas + digitos + especiais
+    )
 
-## 🛠️ Tecnologias Utilizadas
+    # Preenche o restante do comprimento escolhido de forma aleatória e segura
+    caracteres_restantes = [
+        secrets.choice(todos_os_caracteres)
+        for _ in range(comprimento - len(senha_obrigatoria))
+    ]
 
-*   **Python 3.x**
-*   Biblioteca `secrets` (Nativa)
-*   Biblioteca `string` (Nativa)
+    # Combina os caracteres obrigatórios com os restantes
+    lista_senha = senha_obrigatoria + caracteres_restantes
 
-## 🔧 Como Executar o Projeto
+    # Embaralha a lista de forma criptograficamente segura
+    secrets.SystemRandom().shuffle(lista_senha)
 
-1. Certifique-se de ter o Python instalado na sua máquina.
-2. Clone este repositório:
-   ```bash
-   git clone https://github.com
-   ```
-3. Navegue até a pasta do projeto e execute:
-   ```bash
-   python main.py
-   ```
+    # Transforma a lista de volta em uma string (texto)
+    senha_final = "".join(lista_senha)
 
-## 📝 Próximos Passos (Roadmap de Evolução)
-* [ ] Criar uma Interface Gráfica (GUI) simples para o usuário.
-* [ ] Adicionar uma métrica para exibir o nível de entropia da senha gerada.
-* [ ] Implementar a opção de salvar as senhas de forma criptografada localmente.
+    return senha_final
+
+
+# Execução do programa
+if __name__ == "__main__":
+    print("--- GERADOR DE SENHAS SEGURAS ---")
+    tamanho = int(
+        input("Digite o tamanho desejado para a senha (mínimo de 12 recomendado): ")
+    )
+
+    if tamanho < 8:
+        print("Erro: O tamanho mínimo permitido por segurança é 8 caracteres.")
+    else:
+        senha_gerada = gerar_senha(tamanho)
+        print(f"\nSua senha gerada com segurança é: {senha_gerada}")
+       
