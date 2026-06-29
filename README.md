@@ -32,4 +32,5 @@ Neste projeto, apliquei:
 * [ ] Criar uma Interface Gráfica (GUI) simples para o usuário.
 * [ ] Adicionar uma métrica para exibir o nível de entropia da senha gerada.
 * [ ] Implementar a opção de salvar as senhas de forma criptografada localmente.
-* [ ] 
+      
+      Atenciosamente;
